@@ -15,8 +15,10 @@ Open http://localhost:5173. The dashboard runs on Vite and the scheduler API run
 
 1. Create a Firebase project and register a Web app.
 2. Enable Google and/or Email/Password under Authentication providers.
-3. Copy `.env.example` to `.env` and fill in the Firebase Web app values.
-4. Restart `npm run dev:all`.
+3. Create a Firestore database in the Firebase Console.
+4. Copy `.env.example` to `.env` and fill in the Firebase Web app values.
+5. For the server, create a Firebase service account and add its Admin values. The web API key is safe for the browser, but cannot authenticate server-side Firestore writes.
+6. Restart `npm run dev:all`.
 
 The dashboard requires a Firebase session and sends its ID token with every API request. For production API enforcement, add the Firebase Admin service-account values from `.env.example` and set `NIKWAKE_REQUIRE_AUTH=true`.
 
@@ -43,7 +45,7 @@ This repository includes `render.yaml` for a free Render web service. It builds 
 4. Add Firebase Admin service-account values as `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY`.
 5. Deploy. Render uses `npm ci && npm run build` and starts with `npm run bot`.
 
-The free Render filesystem is ephemeral, so monitors stored in `server/data.json` can reset after redeploys or service restarts. For durable free-tier storage, move the store to Firebase Firestore before production use.
+The Render Blueprint uses Firebase Firestore for durable monitor storage. The server requires Firebase Admin credentials for this mode. Local development falls back to `server/data.json` unless `NIKWAKE_STORAGE=firestore` is enabled.
 
 ## Keep Render awake with cron
 

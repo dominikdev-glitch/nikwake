@@ -5,6 +5,7 @@ import { extname } from 'node:path'
 import dns from 'node:dns/promises'
 import { cert, getApps, initializeApp } from 'firebase-admin/app'
 import { getAuth as getAdminAuth } from 'firebase-admin/auth'
+import { getFirestore } from 'firebase-admin/firestore'
 
 const PORT = Number(process.env.PORT || 8787)
 const DATA_FILE = new URL('./server/data.json', import.meta.url)
@@ -12,7 +13,10 @@ const DIST_DIR = new URL('./dist/', import.meta.url)
 const cronSecret = process.env.CRON_SECRET || ''
 const requireAuth = process.env.NIKWAKE_REQUIRE_AUTH === 'true'
 const adminConfigured = process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY
-const adminAuth = adminConfigured ? getAdminAuth(getApps()[0] || initializeApp({ credential: cert({ projectId: process.env.FIREBASE_PROJECT_ID, clientEmail: process.env.FIREBASE_CLIENT_EMAIL, privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') }) })) : null
+const adminApp = adminConfigured ? (getApps()[0] || initializeApp({ credential: cert({ projectId: process.env.FIREBASE_PROJECT_ID, clientEmail: process.env.FIREBASE_CLIENT_EMAIL, privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') }) })) : null
+const adminAuth = adminApp ? getAdminAuth(adminApp) : null
+const firestore = adminApp && process.env.NIKWAKE_STORAGE === 'firestore' ? getFirestore(adminApp) : null
+const firestoreState = firestore?.collection('nikwake').doc('state')
 const allowedCadences = new Map([
   ['Every 1 minute', 60_000],
   ['Every 5 minutes', 300_000],
@@ -25,6 +29,11 @@ let store = await loadStore()
 let saving = Promise.resolve()
 
 async function loadStore() {
+  if (firestoreState) {
+    const snapshot = await firestoreState.get()
+    const data = snapshot.exists ? snapshot.data() : {}
+    return { sites: data.sites || [], activity: data.activity || [] }
+  }
   try {
     const loaded = JSON.parse(await readFile(DATA_FILE, 'utf8'))
     loaded.sites = (loaded.sites || []).map((site) => ({ ...site, running: false }))
@@ -33,7 +42,7 @@ async function loadStore() {
   } catch { return { sites: [], activity: [] } }
 }
 function saveStore() {
-  saving = saving.then(() => writeFile(DATA_FILE, JSON.stringify(store, null, 2)))
+  saving = saving.then(() => firestoreState ? firestoreState.set(store) : writeFile(DATA_FILE, JSON.stringify(store, null, 2)))
   return saving
 }
 function send(response, status, payload) {

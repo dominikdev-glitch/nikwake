@@ -9,6 +9,8 @@ services:
     envVars:
       - key: NIKWAKE_REQUIRE_AUTH
         value: "true"
+      - key: NIKWAKE_STORAGE
+        value: firestore
       - key: CRON_SECRET
         generateValue: true
       - key: VITE_FIREBASE_API_KEY
