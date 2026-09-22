@@ -20,6 +20,7 @@ const adminAuth = adminApp ? getAdminAuth(adminApp) : null
 const firestore = adminApp && process.env.NIKWAKE_STORAGE === 'firestore' ? getFirestore(adminApp) : null
 const firestoreState = firestore?.collection('nikwake').doc('state')
 let firestoreAvailable = Boolean(firestoreState)
+const storageMode = firestoreState ? 'firestore' : 'json'
 const allowedCadences = new Map([
   ['Every 1 minute', 60_000],
   ['Every 5 minutes', 300_000],
@@ -35,6 +36,7 @@ async function loadStore() {
   if (firestoreState) {
     try {
       const snapshot = await firestoreState.get()
+      if (!snapshot.exists) await firestoreState.set({ sites: [], activity: [], createdAt: new Date().toISOString() })
       const data = snapshot.exists ? snapshot.data() : {}
       return { sites: data.sites || [], activity: data.activity || [] }
     } catch (error) {
@@ -142,7 +144,7 @@ const server = createServer(async (request, response) => {
   try {
     if (request.method === 'OPTIONS') { response.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET,POST,PATCH,DELETE,OPTIONS', 'access-control-allow-headers': 'content-type' }); return response.end() }
     const url = new URL(request.url || '/', `http://${request.headers.host}`)
-    if (request.method === 'GET' && url.pathname === '/health') return send(response, 200, { ok: true, service: 'nikwake' })
+    if (request.method === 'GET' && url.pathname === '/health') return send(response, 200, { ok: true, service: 'nikwake', storage: firestoreAvailable ? 'firestore' : 'json', firebaseAdminConfigured: Boolean(adminApp) })
     if (request.method === 'GET' && url.pathname === '/api/cron/keep-alive') {
       if (!cronAuthorized(request, url)) return send(response, 401, { ok: false, error: 'Invalid cron secret' })
       void tick().catch((error) => console.error('Cron scheduler error:', error))

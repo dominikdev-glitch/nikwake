@@ -47,7 +47,7 @@ This repository includes `render.yaml` for a free Render web service. It builds 
 
 The Render Blueprint uses Firebase Firestore for durable monitor storage. The server requires Firebase Admin credentials for this mode. Local development falls back to `server/data.json` unless `NIKWAKE_STORAGE=firestore` is enabled.
 
-If Render logs `5 NOT_FOUND` while starting, open Firebase Console for the same `FIREBASE_PROJECT_ID`, choose **Build > Firestore Database > Create database**, select a location, and redeploy. The default Firestore database must exist before the Admin SDK can read `nikwake/state`.
+If Render logs `5 NOT_FOUND` while starting, open Firebase Console for the same `FIREBASE_PROJECT_ID`, choose **Build > Firestore Database > Create database**, select a location, and redeploy. The app creates the `nikwake/state` document automatically on first start; it cannot create the Firestore database itself. Check `/health`: it should report `storage: firestore` and `firebaseAdminConfigured: true`.
 
 ## Keep Render awake with cron
 
