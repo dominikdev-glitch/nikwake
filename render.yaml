@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: nikwake
+    runtime: node
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm run bot
+    healthCheckPath: /health
+    disk:
+      name: nikwake-data
+      mountPath: /opt/render/project/src/server
+      sizeGB: 1
+    envVars:
+      - key: NIKWAKE_REQUIRE_AUTH
+        value: "true"
+      - key: CRON_SECRET
+        generateValue: true
+      - key: VITE_FIREBASE_API_KEY
+        sync: false
+      - key: VITE_FIREBASE_AUTH_DOMAIN
+        sync: false
+      - key: VITE_FIREBASE_PROJECT_ID
+        sync: false
+      - key: VITE_FIREBASE_STORAGE_BUCKET
+        sync: false
+      - key: VITE_FIREBASE_MESSAGING_SENDER_ID
+        sync: false
+      - key: VITE_FIREBASE_APP_ID
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
