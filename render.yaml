@@ -31,3 +31,5 @@ services:
         sync: false
       - key: FIREBASE_PRIVATE_KEY
         sync: false
+      - key: FIREBASE_ADMIN_JSON
+        sync: false

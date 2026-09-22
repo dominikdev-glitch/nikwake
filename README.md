@@ -42,7 +42,7 @@ This repository includes `render.yaml` for a free Render web service. It builds 
 1. Push the repository to GitHub.
 2. In Render, choose **New > Blueprint** and select the repository.
 3. Add the Firebase Web values as the `VITE_FIREBASE_*` environment variables.
-4. Add Firebase Admin service-account values as `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY`.
+4. Add the complete Firebase Admin JSON as the `FIREBASE_ADMIN_JSON` Render secret. You may use the split `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY` variables instead, but do not use both formats.
 5. Deploy. Render uses `npm ci && npm run build` and starts with `npm run bot`.
 
 The Render Blueprint uses Firebase Firestore for durable monitor storage. The server requires Firebase Admin credentials for this mode. Local development falls back to `server/data.json` unless `NIKWAKE_STORAGE=firestore` is enabled.
