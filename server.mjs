@@ -19,6 +19,7 @@ const adminApp = adminCredentials ? (getApps()[0] || initializeApp({ credential:
 const adminAuth = adminApp ? getAdminAuth(adminApp) : null
 const firestore = adminApp && process.env.NIKWAKE_STORAGE === 'firestore' ? getFirestore(adminApp) : null
 const firestoreState = firestore?.collection('nikwake').doc('state')
+let firestoreAvailable = Boolean(firestoreState)
 const allowedCadences = new Map([
   ['Every 1 minute', 60_000],
   ['Every 5 minutes', 300_000],
@@ -32,9 +33,14 @@ let saving = Promise.resolve()
 
 async function loadStore() {
   if (firestoreState) {
-    const snapshot = await firestoreState.get()
-    const data = snapshot.exists ? snapshot.data() : {}
-    return { sites: data.sites || [], activity: data.activity || [] }
+    try {
+      const snapshot = await firestoreState.get()
+      const data = snapshot.exists ? snapshot.data() : {}
+      return { sites: data.sites || [], activity: data.activity || [] }
+    } catch (error) {
+      firestoreAvailable = false
+      console.error('Firestore is unavailable. Create the Firestore database for this Firebase project, then redeploy. Falling back to server/data.json.', error instanceof Error ? error.message : error)
+    }
   }
   try {
     const loaded = JSON.parse(await readFile(DATA_FILE, 'utf8'))
@@ -44,7 +50,7 @@ async function loadStore() {
   } catch { return { sites: [], activity: [] } }
 }
 function saveStore() {
-  saving = saving.then(() => firestoreState ? firestoreState.set(store) : writeFile(DATA_FILE, JSON.stringify(store, null, 2)))
+  saving = saving.then(() => firestoreAvailable && firestoreState ? firestoreState.set(store) : writeFile(DATA_FILE, JSON.stringify(store, null, 2)))
   return saving
 }
 function send(response, status, payload) {
