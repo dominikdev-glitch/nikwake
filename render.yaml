@@ -2,14 +2,10 @@ services:
   - type: web
     name: nikwake
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm ci && npm run build
     startCommand: npm run bot
     healthCheckPath: /health
-    disk:
-      name: nikwake-data
-      mountPath: /opt/render/project/src/server
-      sizeGB: 1
     envVars:
       - key: NIKWAKE_REQUIRE_AUTH
         value: "true"

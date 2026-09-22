@@ -35,7 +35,7 @@ The dashboard requires a Firebase session and sends its ID token with every API 
 
 ## Deploy on Render
 
-This repository includes `render.yaml` for a single Render web service. It builds the Vite frontend, serves it from the Node process, runs the scheduler, and stores monitor data on a 1 GB persistent disk.
+This repository includes `render.yaml` for a free Render web service. It builds the Vite frontend, serves it from the Node process, and runs the scheduler.
 
 1. Push the repository to GitHub.
 2. In Render, choose **New > Blueprint** and select the repository.
@@ -43,7 +43,7 @@ This repository includes `render.yaml` for a single Render web service. It build
 4. Add Firebase Admin service-account values as `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY`.
 5. Deploy. Render uses `npm ci && npm run build` and starts with `npm run bot`.
 
-The persistent disk is important because the scheduler currently stores monitors in `server/data.json`. For multiple instances or higher scale, move that store to Firestore or Postgres.
+The free Render filesystem is ephemeral, so monitors stored in `server/data.json` can reset after redeploys or service restarts. For durable free-tier storage, move the store to Firebase Firestore before production use.
 
 ## Keep Render awake with cron
 
