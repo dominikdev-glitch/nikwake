@@ -19,3 +19,41 @@
 .fleet-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: -5px 0 14px; }.search-field { display: flex; align-items: center; gap: 8px; width: 260px; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; color: #a0ada8; background: #fff; }.search-field input { width: 100%; border: 0; outline: 0; color: #52615c; background: transparent; font-size: 11px; }.filter-tabs { display: flex; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 7px; background: #f8faf9; }.filter-tabs button { padding: 6px 9px; border: 0; border-radius: 5px; color: #8a9792; background: transparent; font-size: 10px; }.filter-tabs button span { margin-left: 5px; color: #b0bbb6; }.filter-tabs button.selected { color: #227e67; background: #fff; box-shadow: 0 1px 3px rgba(35,83,62,.08); font-weight: 700; }.modal-backdrop { position: fixed; z-index: 10; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(35,55,48,.27); }.edit-modal { width: min(390px, 100%); padding: 25px; border: 1px solid #e0eae4; border-radius: 12px; background: #fff; box-shadow: 0 24px 80px rgba(25,61,45,.2); }.modal-heading { display: flex; justify-content: space-between; align-items: flex-start; }.modal-heading h2 { margin: 5px 0 0; color: #344540; font-family: 'Space Grotesk', sans-serif; font-size: 20px; }.modal-heading button { border: 0; color: #9ba8a3; background: transparent; font-size: 21px; }.modal-url { overflow: hidden; margin: 8px 0 22px; color: #9ca9a5; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }.edit-modal label { display: grid; gap: 6px; margin: 13px 0; color: #697873; font-size: 10px; font-weight: 600; }.edit-modal select { height: 38px; border: 1px solid #dfe8e3; border-radius: 6px; padding: 0 10px; color: #52615c; outline: 0; background: #fbfdfc; font-size: 11px; }.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 22px; }.secondary-button { height: 37px; padding: 0 14px; border: 1px solid var(--line); border-radius: 6px; color: #7c8984; background: #fff; font-size: 11px; }
 @media (max-width: 900px) { .dashboard-split, .settings-grid, .docs-grid { grid-template-columns: 1fr; } }
 @media (max-width: 680px) { .page-intro { align-items: flex-start; flex-direction: column; }.page-intro h1 { font-size: 26px; }.docs-grid { grid-template-columns: 1fr; } }
+
+/* Readability and product polish */
+body { color: #263b36; font-size: 15px; }
+.sidebar { padding: 32px 18px 22px; }
+.brand { font-size: 22px; }
+.workspace-switcher strong, .user-row strong, .mini-status strong { font-size: 13px; }
+.workspace-switcher small, .user-row small, .mini-status small { font-size: 11px; }
+.nav-label { font-size: 11px; }
+.nav-item { height: 44px; font-size: 13px; }
+.nav-icon { font-size: 17px; }
+.topbar { height: 78px; }
+.breadcrumbs { font-size: 13px; }
+.help-button { font-size: 13px; }
+.content-wrap { padding-top: 52px; }
+.intro h1, .page-intro h1 { font-size: 36px; letter-spacing: -1px; }
+.intro p, .page-intro p { font-size: 15px; }
+.eyebrow { font-size: 11px; letter-spacing: 1.5px; }
+.live-pill { padding: 10px 14px; font-size: 12px; }
+.stat-card { padding: 22px; }
+.stat-top { font-size: 13px; }
+.stat-card > strong { font-size: 32px; }
+.stat-foot { font-size: 12px; }
+.add-panel { padding: 24px; }
+.add-panel h2, .section-heading h2, .panel-heading h2, .tip-panel h2 { font-size: 17px; }
+.add-panel p, .section-heading p, .panel-heading p { font-size: 13px; }
+.add-form input, .add-form select, .primary-button { height: 42px; font-size: 12px; }
+.site-row { min-height: 82px; padding: 13px 20px; }
+.table-head { font-size: 10px; }
+.site-cell strong, .last-cell strong { font-size: 13px; }
+.site-cell small, .last-cell small, .policy-line { font-size: 11px !important; }
+.schedule-cell, .last-cell { font-size: 12px; }
+.status-badge { font-size: 12px; }
+.row-actions button { width: 29px; height: 29px; font-size: 16px; }
+.activity-copy strong { font-size: 12px; }.activity-copy small, .activity-time { font-size: 11px; }
+.filter-tabs button, .search-field input { font-size: 12px; }
+.setting-card strong, .doc-card h2 { font-size: 20px; }
+.setting-card p, .doc-card p { font-size: 13px; }
+@media (max-width: 680px) { .content-wrap { padding-top: 32px; }.intro h1, .page-intro h1 { font-size: 29px; }.intro p, .page-intro p { font-size: 13px; }.stat-top { font-size: 10px; }.stat-card > strong { font-size: 25px; }.add-panel { padding: 18px; }.site-cell strong, .last-cell strong { font-size: 12px; }.site-cell small, .last-cell small, .policy-line { font-size: 10px !important; } }
